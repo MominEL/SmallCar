@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     const { data: resendData, error } = await resend.emails.send({
       from: "SmallCar Enquiries <onboarding@resend.dev>", // Replace with verified domain later
       to: [TO_EMAIL],
-      reply_to: email,
+      replyTo: email,
       subject,
       html,
     });

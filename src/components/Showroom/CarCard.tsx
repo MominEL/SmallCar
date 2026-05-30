@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import styles from "./CarCard.module.css";
+
+const MotionLink = motion.create(Link);
 
 interface CarCardProps {
   car: {
@@ -24,9 +29,13 @@ export function CarCard({ car, featured = false }: CarCardProps) {
   const imageUrl = car.photo?.secure_url || "/placeholder-car.jpg";
 
   return (
-    <Link
+    <MotionLink
       href={`/showroom/${car.slug?.current}`}
       className={`${styles.card} ${featured ? styles.featured : ""}`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className={styles.imageWrap}>
         <Image
@@ -72,6 +81,6 @@ export function CarCard({ car, featured = false }: CarCardProps) {
           <span className={styles.cta}>View details →</span>
         </div>
       </div>
-    </Link>
+    </MotionLink>
   );
 }

@@ -205,3 +205,26 @@
     grid-template-columns: 1fr;
   }
 }
+
+.whatsappBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  background: #25D366;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-syne), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 16px;
+  transition: all 0.3s ease;
+}
+
+.whatsappBtn:hover {
+  background: #128C7E;
+}

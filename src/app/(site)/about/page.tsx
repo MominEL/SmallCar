@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import { client } from "@/lib/sanity.client";
 import { siteSettingsQuery, teamMembersQuery } from "@/lib/sanity.queries";
 import { RichText } from "@/components/RichText/RichText";

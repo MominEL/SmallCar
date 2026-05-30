@@ -1,0 +1,54 @@
+.notFound {
+  padding-top: 140px;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.container {
+  max-width: 600px;
+  padding: 0 24px;
+}
+
+.title {
+  font-family: var(--font-playfair), serif;
+  font-size: 120px;
+  line-height: 1;
+  color: var(--gold);
+  margin: 0 0 16px 0;
+}
+
+.subtitle {
+  font-family: var(--font-syne), sans-serif;
+  font-size: 32px;
+  color: var(--ink);
+  margin: 0 0 24px 0;
+}
+
+.text {
+  font-size: 16px;
+  color: var(--mid);
+  line-height: 1.6;
+  margin: 0 0 40px 0;
+}
+
+.button {
+  display: inline-block;
+  padding: 16px 32px;
+  background: var(--ink);
+  color: var(--bg);
+  text-decoration: none;
+  font-family: var(--font-syne), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background: var(--gold);
+  color: #fff;
+}

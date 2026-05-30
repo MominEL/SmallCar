@@ -113,10 +113,15 @@ export default async function ContactPage() {
                     referrerPolicy="no-referrer-when-downgrade"
                   />
                 ) : (
-                  <div className={styles.mapPlaceholder}>
-                    <span>Map embed goes here</span>
-                    <p>Add Google Maps URL in Sanity Settings</p>
-                  </div>
+                  <iframe
+                    src="https://maps.google.com/maps?q=Lyne%20Rd,%20Virginia%20Water%20GU25%204EG&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
                 )}
               </div>
             </div>
