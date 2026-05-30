@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useFavourites } from "@/hooks/useFavourites";
 import styles from "./CarCard.module.css";
 
 const MotionLink = motion.create(Link);
@@ -37,6 +38,10 @@ const badgeMap: Record<string, string> = {
 export function CarCard({ car, featured = false }: CarCardProps) {
   const imageUrl = car.photo?.secure_url || "/placeholder-car.jpg";
   const displayBadge = car.badge ? badgeMap[car.badge] || car.badge : undefined;
+  
+  const { isFavourite, toggleFavourite, mounted } = useFavourites();
+  const slugStr = car.slug?.current || "";
+  const favourited = mounted && isFavourite(slugStr);
 
   return (
     <MotionLink
@@ -55,6 +60,19 @@ export function CarCard({ car, featured = false }: CarCardProps) {
           className={styles.image}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
+        <button 
+          className={`${styles.heartBtn} ${favourited ? styles.favourited : ""}`}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleFavourite(slugStr);
+          }}
+          aria-label={favourited ? "Remove from favourites" : "Add to favourites"}
+        >
+          <svg viewBox="0 0 24 24" fill={favourited ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
         {displayBadge && <span className={styles.badge}>{displayBadge}</span>}
       </div>
       <div className={styles.info}>

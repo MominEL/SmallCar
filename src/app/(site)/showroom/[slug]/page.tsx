@@ -7,7 +7,11 @@ import { generateCarTitle, generateSeoTitle, generateMetaDescription } from "@/l
 import { PhotoGallery } from "@/components/Showroom/PhotoGallery";
 import { RichText } from "@/components/RichText/RichText";
 import { EnquiryForm } from "@/components/Showroom/EnquiryForm";
+import { StockAlertForm } from "@/components/Showroom/StockAlertForm";
+import { ContactActions } from "@/components/Showroom/ContactActions";
 import { CarCard } from "@/components/Showroom/CarCard";
+import { siteSettingsQuery } from "@/lib/sanity.queries";
+import { headers } from "next/headers";
 import styles from "./page.module.css";
 
 interface PageProps {
@@ -35,6 +39,15 @@ export default async function CarDetailsPage({ params }: PageProps) {
     ...rawCar,
     name: generateCarTitle(rawCar)
   };
+
+  const siteSettings = await client.fetch(siteSettingsQuery);
+  const phoneNumber = siteSettings?.phone || "";
+
+  // Getting absolute URL for sharing
+  const headersList = headers();
+  const host = headersList.get("host") || "localhost:3000";
+  const protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+  const currentUrl = `${protocol}://${host}/showroom/${params.slug}`;
 
   // Fetch similar cars
   const rawSimilarCars = await client.fetch(similarCarsQuery, {
@@ -146,11 +159,16 @@ export default async function CarDetailsPage({ params }: PageProps) {
               </div>
             </div>
 
-            {!car.isSold && (
+            {!car.isSold ? (
               <div className={styles.enquiryBox}>
                 <EnquiryForm carName={car.name} carId={car._id} />
+                <ContactActions 
+                  carName={car.name} 
+                  phoneNumber={phoneNumber} 
+                  carUrl={currentUrl} 
+                />
                 <a 
-                  href={`https://wa.me/447000000000?text=Hi! I'm interested in the ${car.year} ${car.name}`} 
+                  href={`https://wa.me/${siteSettings?.whatsapp?.replace(/\D/g, '') || '447000000000'}?text=Hi! I'm interested in the ${car.year} ${car.name}`} 
                   className={styles.whatsappBtn} 
                   target="_blank" 
                   rel="noopener noreferrer"
@@ -160,6 +178,10 @@ export default async function CarDetailsPage({ params }: PageProps) {
                   </svg>
                   Chat on WhatsApp
                 </a>
+              </div>
+            ) : (
+              <div className={styles.enquiryBox}>
+                <StockAlertForm carName={car.name} />
               </div>
             )}
           </aside>

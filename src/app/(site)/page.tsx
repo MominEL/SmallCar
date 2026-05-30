@@ -7,6 +7,7 @@ import { HeroSection } from "@/components/Homepage/HeroSection";
 import { StatsBar } from "@/components/Homepage/StatsBar";
 import { TrustStrip } from "@/components/Homepage/TrustStrip";
 import { Marquee } from "@/components/Homepage/Marquee";
+import { GoogleReviews } from "@/components/Homepage/GoogleReviews";
 import { CarCard } from "@/components/Showroom/CarCard";
 
 export const revalidate = 60;
@@ -58,6 +59,7 @@ export default async function HomePage() {
       </section>
 
       <TrustStrip />
+      <GoogleReviews />
       <Marquee />
     </div>
   );

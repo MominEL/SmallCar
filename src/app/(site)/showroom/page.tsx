@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { client } from "@/lib/sanity.client";
 import { allCarsQuery } from "@/lib/sanity.queries";
 import { CarCard } from "@/components/Showroom/CarCard";
+import { CarSourcingForm } from "@/components/Showroom/CarSourcingForm";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,6 @@ export const revalidate = 60;
 
 import Link from "next/link";
 import { generateCarTitle } from "@/lib/titleSystem";
-// ... (imports remain at top)
 
 export default async function ShowroomPage({
   searchParams,
@@ -83,7 +83,6 @@ export default async function ShowroomPage({
           ) : (
             <div className={styles.grid}>
               {filteredCars.map((car: any, index: number) => {
-                // Only make the first item large if it's an editor's pick AND we aren't filtering (optional, but good practice)
                 const isFeatured = index === 0 && car.isEditorPick && !selectedMake;
                 return (
                   <div
@@ -96,6 +95,9 @@ export default async function ShowroomPage({
               })}
             </div>
           )}
+          
+          {/* Car Sourcing Form */}
+          <CarSourcingForm />
         </div>
       </section>
     </div>

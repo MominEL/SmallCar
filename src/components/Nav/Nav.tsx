@@ -8,6 +8,7 @@ import styles from "./Nav.module.css";
 
 const NAV_LINKS = [
   { href: "/showroom", label: "Showroom" },
+  { href: "/saved", label: "Saved ❤️" },
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },

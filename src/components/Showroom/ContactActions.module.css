@@ -1,0 +1,57 @@
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.callBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--color-primary);
+  color: var(--color-background);
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.callBtn:hover {
+  background: #fff;
+  transform: translateY(-2px);
+}
+
+.callBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.shareBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid rgba(242, 240, 234, 0.2);
+  padding: 14px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.shareBtn:hover {
+  border-color: var(--color-text);
+  background: rgba(242, 240, 234, 0.05);
+}
+
+.shareBtn svg {
+  width: 18px;
+  height: 18px;
+}
