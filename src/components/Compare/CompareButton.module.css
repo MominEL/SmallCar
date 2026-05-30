@@ -1,0 +1,76 @@
+.iconBtn {
+  position: absolute;
+  top: 10px;
+  right: 50px; /* Space it out from the heart button (which is at right: 10px) */
+  background: var(--surface);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.iconBtn svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.3s ease;
+  color: currentColor;
+}
+
+.iconBtn:hover {
+  background: var(--surface-2);
+  color: var(--gold);
+}
+
+.iconBtn:hover svg {
+  transform: scale(1.1);
+}
+
+.iconActive {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* Text Variant */
+.textBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  padding: 14px;
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.textBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.textBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.textActive {
+  border-color: var(--gold);
+  background: var(--gold-bg);
+  color: var(--gold);
+}

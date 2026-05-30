@@ -1,0 +1,430 @@
+/* ═══════════════════════════════════════════════════
+   Compare Page
+   ═══════════════════════════════════════════════════ */
+
+.page {
+  padding-top: 80px;
+  min-height: 100vh;
+}
+
+.pageHeader {
+  padding: 32px 5%;
+  max-width: 1400px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .pageHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+
+.title {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-top: 10px;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--gold-2);
+}
+
+.subtitle {
+  font-size: 11px;
+  color: var(--mid);
+  margin-top: 6px;
+  letter-spacing: 0.02em;
+}
+
+.hdrRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .hdrRight {
+    align-items: flex-start;
+  }
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.leg {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: var(--mid);
+}
+
+.legDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.addCarBtn {
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--mid);
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.addCarBtn:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* ── COMPARE GRID ── */
+.compareWrap {
+  padding: 0 5% 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.compareTable {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 40px;
+}
+
+/* Column headers — car cards */
+.colLabel {
+  width: 220px;
+  padding: 0;
+}
+
+.colCar {
+  width: calc((100% - 220px) / 3);
+  padding: 0;
+  vertical-align: top;
+}
+
+.carHeader {
+  background: var(--surface);
+  padding: 24px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.carHeaderWinner {
+  background: rgba(184, 150, 110, 0.05);
+  border-top: 2px solid var(--gold);
+}
+
+.carHeader:first-of-type {
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+.carHeader:not(:first-of-type) {
+  border-top: 1px solid var(--border);
+}
+
+.carImgArea {
+  height: 140px;
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.carImg {
+  object-fit: cover;
+}
+
+.carWinnerBadge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 4px 8px;
+  border-radius: 1px;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(184, 91, 91, 0.15);
+  border: 1px solid rgba(184, 91, 91, 0.3);
+  color: var(--red);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.removeBtn:hover {
+  background: var(--red-bg);
+  border-color: var(--red);
+}
+
+.carName {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.carYear {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 16px;
+}
+
+.carPrice {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+  margin-top: auto;
+}
+
+.carPriceCheaper {
+  color: var(--green);
+}
+
+.carBtns {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btnEnq {
+  background: var(--gold);
+  color: var(--bg);
+  border: none;
+  padding: 12px;
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--radius);
+  width: 100%;
+  transition: opacity 0.2s;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btnEnq:hover {
+  opacity: 0.85;
+}
+
+.btnView {
+  background: transparent;
+  color: var(--mid);
+  border: 1px solid var(--border);
+  padding: 12px;
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--radius);
+  width: 100%;
+  transition: all 0.2s;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btnView:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* Row label column */
+.rowLabelCell {
+  background: var(--bg);
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.rowGroupHeader {
+  background: var(--surface-3);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.groupLabelText {
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.labelText {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* Value cells */
+.valCell {
+  background: var(--surface);
+  padding: 16px 24px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.valCell:first-of-type {
+  border-left: 1px solid var(--border);
+}
+
+.valCellWin {
+  background: rgba(184, 150, 110, 0.05); /* very light gold */
+}
+
+.valCellLose {
+  background: var(--bg);
+}
+
+.val {
+  font-size: 13px;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.valWin {
+  color: var(--gold-2);
+  font-weight: 500;
+}
+
+.valLose {
+  color: var(--mid);
+}
+
+.winTag {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-border);
+  color: var(--gold);
+  padding: 3px 8px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.greenTag {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--green-bg);
+  border: 1px solid rgba(74, 158, 107, 0.35);
+  color: var(--green);
+  padding: 3px 8px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* Empty slot */
+.emptyCar {
+  background: var(--surface);
+  padding: 24px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  height: 100%;
+}
+
+.emptyCar:hover {
+  border-color: var(--gold);
+  background: var(--gold-bg);
+}
+
+.emptyIcon {
+  font-size: 28px;
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+
+.emptyTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mid);
+  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.emptySub {
+  font-size: 11px;
+  color: var(--dim);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.loading, .noCars {
+  padding: 100px 5%;
+  text-align: center;
+  font-size: 14px;
+  color: var(--mid);
+}

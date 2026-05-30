@@ -47,6 +47,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { GlobalToast } from "@/components/Compare/GlobalToast";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -59,6 +61,7 @@ export default function RootLayout({
       </head>
       <body className={`${playfair.variable} ${syne.variable}`}>
         {children}
+        <GlobalToast />
       </body>
     </html>
   );

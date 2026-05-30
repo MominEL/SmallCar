@@ -166,6 +166,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
                   carName={car.name} 
                   phoneNumber={phoneNumber} 
                   carUrl={currentUrl} 
+                  slug={car.slug?.current || params.slug}
                 />
                 <a 
                   href={`https://wa.me/${siteSettings?.whatsapp?.replace(/\D/g, '') || '447000000000'}?text=Hi! I'm interested in the ${car.year} ${car.name}`} 
