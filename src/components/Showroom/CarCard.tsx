@@ -25,8 +25,18 @@ interface CarCardProps {
   featured?: boolean;
 }
 
+const badgeMap: Record<string, string> = {
+  "editors-pick": "Editor's pick",
+  "new-in": "New in",
+  "low-miles": "Low miles",
+  "popular": "Popular",
+  "reduced": "Reduced",
+  "just-in": "Just in",
+};
+
 export function CarCard({ car, featured = false }: CarCardProps) {
   const imageUrl = car.photo?.secure_url || "/placeholder-car.jpg";
+  const displayBadge = car.badge ? badgeMap[car.badge] || car.badge : undefined;
 
   return (
     <MotionLink
@@ -45,7 +55,7 @@ export function CarCard({ car, featured = false }: CarCardProps) {
           className={styles.image}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        {car.badge && <span className={styles.badge}>{car.badge}</span>}
+        {displayBadge && <span className={styles.badge}>{displayBadge}</span>}
       </div>
       <div className={styles.info}>
         <span className={styles.year}>{car.year}</span>

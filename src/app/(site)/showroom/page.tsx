@@ -12,8 +12,24 @@ export const metadata: Metadata = {
 // Revalidate every 60 seconds so new cars appear quickly
 export const revalidate = 60;
 
-export default async function ShowroomPage() {
+import Link from "next/link";
+// ... (imports remain at top)
+
+export default async function ShowroomPage({
+  searchParams,
+}: {
+  searchParams: { make?: string };
+}) {
   const cars = await client.fetch(allCarsQuery);
+
+  // Extract unique makes from currently in-stock cars
+  const availableMakes = Array.from(new Set(cars.map((car: any) => car.make))).sort() as string[];
+
+  // Filter cars based on selected make
+  const selectedMake = searchParams.make;
+  const filteredCars = selectedMake
+    ? cars.filter((car: any) => car.make === selectedMake)
+    : cars;
 
   return (
     <div className={styles.page}>
@@ -30,30 +46,40 @@ export default async function ShowroomPage() {
         </div>
       </header>
 
-      {/* Filter bar placeholder - will become interactive later */}
+      {/* Dynamic Filter Bar */}
       <div className={styles.filters}>
         <div className="container">
           <div className={styles.filterList}>
-            <button className={`${styles.filterBtn} ${styles.active}`}>All cars</button>
-            <button className={styles.filterBtn}>MINI</button>
-            <button className={styles.filterBtn}>Fiat</button>
-            <button className={styles.filterBtn}>Abarth</button>
-            <button className={styles.filterBtn}>Other</button>
+            <Link 
+              href="/showroom" 
+              className={`${styles.filterBtn} ${!selectedMake ? styles.active : ""}`}
+            >
+              All cars
+            </Link>
+            {availableMakes.map((make) => (
+              <Link
+                key={make}
+                href={`/showroom?make=${make}`}
+                className={`${styles.filterBtn} ${selectedMake === make ? styles.active : ""}`}
+              >
+                {make}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
 
       <section className={styles.gridSection}>
         <div className="container">
-          {cars.length === 0 ? (
+          {filteredCars.length === 0 ? (
             <div className={styles.empty}>
-              <p>No cars currently available. We are always sourcing new stock.</p>
+              <p>No cars currently available matching this filter.</p>
             </div>
           ) : (
             <div className={styles.grid}>
-              {cars.map((car: any, index: number) => {
-                // Make the first item large if it's an editor's pick
-                const isFeatured = index === 0 && car.isEditorPick;
+              {filteredCars.map((car: any, index: number) => {
+                // Only make the first item large if it's an editor's pick AND we aren't filtering (optional, but good practice)
+                const isFeatured = index === 0 && car.isEditorPick && !selectedMake;
                 return (
                   <div 
                     key={car._id} 

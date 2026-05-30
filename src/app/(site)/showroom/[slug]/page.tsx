@@ -36,6 +36,17 @@ export default async function CarDetailsPage({ params }: PageProps) {
     price: car.price,
   });
 
+  const badgeMap: Record<string, string> = {
+    "editors-pick": "Editor's pick",
+    "new-in": "New in",
+    "low-miles": "Low miles",
+    "popular": "Popular",
+    "reduced": "Reduced",
+    "just-in": "Just in",
+  };
+  
+  const displayBadge = car.badge ? badgeMap[car.badge] || car.badge : undefined;
+
   return (
     <article className={styles.page}>
       <div className="container">
@@ -46,7 +57,7 @@ export default async function CarDetailsPage({ params }: PageProps) {
           </Link>
           <div className={styles.badges}>
             {car.isSold && <span className={`${styles.badge} ${styles.badgeSold}`}>Sold</span>}
-            {car.badge && <span className={styles.badge}>{car.badge}</span>}
+            {displayBadge && <span className={styles.badge}>{displayBadge}</span>}
           </div>
         </div>
 
