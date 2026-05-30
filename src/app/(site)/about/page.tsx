@@ -15,6 +15,8 @@ export default async function AboutPage() {
   const settings = await client.fetch(siteSettingsQuery);
   const team = await client.fetch(teamMembersQuery);
 
+  
+  
   return (
     <div className={styles.page}>
       {/* ── Hero ── */}
