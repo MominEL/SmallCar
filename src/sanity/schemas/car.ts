@@ -1,6 +1,7 @@
 import { defineField, defineType } from "sanity";
 
 import { generateSlug, generateCarTitle } from "../../lib/titleSystem";
+import { ModelInput } from "../components/ModelInput";
 
 export const car = defineType({
   name: "car",
@@ -58,7 +59,8 @@ export const car = defineType({
       name: "model",
       title: "Model",
       type: "string",
-      description: 'e.g. "Cooper S", "500", "Polo"',
+      description: 'e.g. "Cooper S", "500", "Polo". Start typing to see suggestions.',
+      components: { input: ModelInput },
       validation: (rule) => rule.required(),
     }),
     defineField({
