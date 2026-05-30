@@ -6,7 +6,7 @@ export const allCarsQuery = groq`
     _id,
     name,
     slug,
-    make,
+    "make": select(make == "Other" => customMake, make),
     bodyType,
     badge,
     "photo": photos[0],
@@ -30,7 +30,7 @@ export const carBySlugQuery = groq`
     _id,
     name,
     slug,
-    make,
+    "make": select(make == "Other" => customMake, make),
     bodyType,
     badge,
     photos,
@@ -64,7 +64,7 @@ export const featuredCarsQuery = groq`
     _id,
     name,
     slug,
-    make,
+    "make": select(make == "Other" => customMake, make),
     badge,
     "photo": photos[0],
     year,
@@ -81,11 +81,15 @@ export const featuredCarsQuery = groq`
 
 // ── Similar cars (same make or ±£5k price range, exclude current) ──
 export const similarCarsQuery = groq`
-  *[_type == "car" && !isSold && _id != $currentId && (make == $make || (price > $price - 5000 && price < $price + 5000))] | order(dateAdded desc)[0..2] {
+  *[_type == "car" && !isSold && _id != $currentId && (
+    (make != "Other" && make == $make) || 
+    (make == "Other" && customMake == $make) || 
+    (price > $price - 5000 && price < $price + 5000)
+  )] | order(dateAdded desc)[0..2] {
     _id,
     name,
     slug,
-    make,
+    "make": select(make == "Other" => customMake, make),
     "photo": photos[0],
     year,
     mileage,

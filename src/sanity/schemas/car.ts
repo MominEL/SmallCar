@@ -25,20 +25,36 @@ export const car = defineType({
       type: "string",
       options: {
         list: [
-          "MINI",
-          "Fiat",
-          "VW",
-          "Abarth",
-          "Ford",
-          "Renault",
-          "Toyota",
-          "Peugeot",
-          "Honda",
-          "Suzuki",
-          "Other",
+          "Abarth", "Alfa Romeo", "Alpine", "Aston Martin", "Audi", 
+          "Bentley", "BMW", "Bugatti", "Buick", "Cadillac", "Chevrolet", 
+          "Chrysler", "Citroën", "Cupra", "Dacia", "Daewoo", "Daihatsu", 
+          "Dodge", "DS Automobiles", "Ferrari", "Fiat", "Fisker", "Ford", 
+          "Genesis", "GMC", "Honda", "Hummer", "Hyundai", "Infiniti", 
+          "Isuzu", "Iveco", "Jaguar", "Jeep", "Kia", "Koenigsegg", 
+          "Lada", "Lamborghini", "Lancia", "Land Rover", "Lexus", 
+          "Lincoln", "Lotus", "Maserati", "Maybach", "Mazda", "McLaren", 
+          "Mercedes-Benz", "MG", "MINI", "Mitsubishi", "Morgan", "Nissan", 
+          "Opel", "Pagani", "Peugeot", "Polestar", "Porsche", "Renault", 
+          "Rolls-Royce", "Rover", "Saab", "SEAT", "Skoda", "Smart", 
+          "SsangYong", "Subaru", "Suzuki", "Tesla", "Toyota", "Vauxhall", 
+          "Volkswagen", "Volvo", "Other"
         ],
       },
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "customMake",
+      title: "Custom Make",
+      type: "string",
+      description: "Please type the car make since you selected 'Other'",
+      hidden: ({ document }) => document?.make !== "Other",
+      validation: (rule) => 
+        rule.custom((value, context) => {
+          if (context.document?.make === "Other" && !value) {
+            return "Custom make is required when 'Other' is selected";
+          }
+          return true;
+        }),
     }),
     defineField({
       name: "bodyType",
