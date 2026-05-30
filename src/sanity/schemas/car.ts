@@ -1,22 +1,20 @@
 import { defineField, defineType } from "sanity";
 
+import { generateSlug, generateCarTitle } from "../../lib/titleSystem";
+
 export const car = defineType({
   name: "car",
   title: "Car",
   type: "document",
   fields: [
     defineField({
-      name: "name",
-      title: "Car Name",
-      type: "string",
-      description: 'Full name, e.g. "MINI Cooper S Resolute Edition"',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
       name: "slug",
       title: "Slug",
       type: "slug",
-      options: { source: "name", maxLength: 96 },
+      options: { 
+        source: (doc) => generateSlug(doc as any),
+        maxLength: 96 
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -55,6 +53,19 @@ export const car = defineType({
           }
           return true;
         }),
+    }),
+    defineField({
+      name: "model",
+      title: "Model",
+      type: "string",
+      description: 'e.g. "Cooper S", "500", "Polo"',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "variant",
+      title: "Variant / Trim",
+      type: "string",
+      description: 'e.g. "Resolute Edition", "Dolcevita", "GTI"',
     }),
     defineField({
       name: "bodyType",
@@ -250,17 +261,25 @@ export const car = defineType({
   ],
   preview: {
     select: {
-      title: "name",
+      make: "make",
+      customMake: "customMake",
+      model: "model",
+      variant: "variant",
+      year: "year",
       subtitle: "price",
       media: "photos.0",
       sold: "isSold",
       editorPick: "isEditorPick",
     },
-    prepare({ title, subtitle, media, sold, editorPick }) {
+    prepare({ make, customMake, model, variant, year, subtitle, media, sold, editorPick }) {
       const badges = [];
       if (sold) badges.push("SOLD");
       if (editorPick) badges.push("⭐ Pick");
       const prefix = badges.length ? `[${badges.join(" · ")}] ` : "";
+      
+      const resolvedMake = make === "Other" ? customMake : make;
+      const title = generateCarTitle({ make: resolvedMake, model, variant, year } as any);
+
       return {
         title: `${prefix}${title}`,
         subtitle: subtitle ? `£${Number(subtitle).toLocaleString()}` : "No price",

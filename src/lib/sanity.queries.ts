@@ -4,7 +4,8 @@ import { groq } from "next-sanity";
 export const allCarsQuery = groq`
   *[_type == "car" && !isSold] | order(dateAdded desc) {
     _id,
-    name,
+    model,
+    variant,
     slug,
     "make": select(make == "Other" => customMake, make),
     bodyType,
@@ -28,7 +29,8 @@ export const allCarsQuery = groq`
 export const carBySlugQuery = groq`
   *[_type == "car" && slug.current == $slug][0] {
     _id,
-    name,
+    model,
+    variant,
     slug,
     "make": select(make == "Other" => customMake, make),
     bodyType,
@@ -62,7 +64,8 @@ export const carBySlugQuery = groq`
 export const featuredCarsQuery = groq`
   *[_type == "car" && !isSold && (isEditorPick == true || isFeatured == true)] | order(isEditorPick desc, dateAdded desc)[0..2] {
     _id,
-    name,
+    model,
+    variant,
     slug,
     "make": select(make == "Other" => customMake, make),
     badge,
@@ -87,7 +90,8 @@ export const similarCarsQuery = groq`
     (price > $price - 5000 && price < $price + 5000)
   )] | order(dateAdded desc)[0..2] {
     _id,
-    name,
+    model,
+    variant,
     slug,
     "make": select(make == "Other" => customMake, make),
     "photo": photos[0],

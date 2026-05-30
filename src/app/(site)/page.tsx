@@ -2,6 +2,7 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import { client } from "@/lib/sanity.client";
 import { featuredCarsQuery } from "@/lib/sanity.queries";
+import { generateCarTitle } from "@/lib/titleSystem";
 import { HeroSection } from "@/components/Homepage/HeroSection";
 import { StatsBar } from "@/components/Homepage/StatsBar";
 import { TrustStrip } from "@/components/Homepage/TrustStrip";
@@ -11,7 +12,11 @@ import { CarCard } from "@/components/Showroom/CarCard";
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const featuredCars = await client.fetch(featuredCarsQuery);
+  const rawFeaturedCars = await client.fetch(featuredCarsQuery);
+  const featuredCars = rawFeaturedCars?.map((car: any) => ({
+    ...car,
+    name: generateCarTitle(car)
+  })) || [];
 
   return (
     <div className={styles.page}>

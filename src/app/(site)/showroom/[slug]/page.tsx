@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { client } from "@/lib/sanity.client";
 import { carBySlugQuery, similarCarsQuery } from "@/lib/sanity.queries";
+import { generateCarTitle, generateSeoTitle, generateMetaDescription } from "@/lib/titleSystem";
 import { PhotoGallery } from "@/components/Showroom/PhotoGallery";
 import { RichText } from "@/components/RichText/RichText";
 import { EnquiryForm } from "@/components/Showroom/EnquiryForm";
@@ -20,21 +21,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!car) return {};
 
   return {
-    title: `${car.name}`,
-    description: `View this ${car.year} ${car.name} with ${car.mileage?.toLocaleString()} miles. Available now at SmallCar by PMS Motors in Virginia Water.`,
+    title: generateSeoTitle(car),
+    description: generateMetaDescription(car),
   };
 }
 
 export default async function CarDetailsPage({ params }: PageProps) {
-  const car = await client.fetch(carBySlugQuery, { slug: params.slug });
-  if (!car) notFound();
+  const rawCar = await client.fetch(carBySlugQuery, { slug: params.slug });
+  if (!rawCar) notFound();
+
+  // Inject generated name
+  const car = {
+    ...rawCar,
+    name: generateCarTitle(rawCar)
+  };
 
   // Fetch similar cars
-  const similarCars = await client.fetch(similarCarsQuery, {
+  const rawSimilarCars = await client.fetch(similarCarsQuery, {
     currentId: car._id,
     make: car.make,
     price: car.price,
   });
+  
+  const similarCars = rawSimilarCars?.map((similarCar: any) => ({
+    ...similarCar,
+    name: generateCarTitle(similarCar)
+  })) || [];
 
   const badgeMap: Record<string, string> = {
     "editors-pick": "Editor's pick",

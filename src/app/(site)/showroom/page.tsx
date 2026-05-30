@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 import Link from "next/link";
+import { generateCarTitle } from "@/lib/titleSystem";
 // ... (imports remain at top)
 
 export default async function ShowroomPage({
@@ -20,7 +21,11 @@ export default async function ShowroomPage({
 }: {
   searchParams: { make?: string };
 }) {
-  const cars = await client.fetch(allCarsQuery);
+  const rawCars = await client.fetch(allCarsQuery);
+  const cars = rawCars.map((car: any) => ({
+    ...car,
+    name: generateCarTitle(car)
+  }));
 
   // Extract unique makes from currently in-stock cars
   const availableMakes = Array.from(new Set(cars.map((car: any) => car.make))).sort() as string[];
