@@ -25,15 +25,15 @@ html[data-theme="dark"] {
 
   /* Text */
   --ink:           #f2f0ea;
-  --mid:           rgba(242, 240, 234, 0.50);
-  --dim:           rgba(242, 240, 234, 0.25);
+  --mid:           rgba(242, 240, 234, 0.45);
+  --dim:           rgba(242, 240, 234, 0.22);
   --dimmer:        rgba(242, 240, 234, 0.10);
 
   /* ★ BRAND ACCENT — change these when logo arrives ★ */
   --gold:          #b8966e;
   --gold-2:        #d4b896;
-  --gold-bg:       rgba(184, 150, 110, 0.09);
-  --gold-border:   rgba(184, 150, 110, 0.28);
+  --gold-bg:       rgba(184, 150, 110, 0.10);
+  --gold-border:   rgba(184, 150, 110, 0.30);
 
   /* UI */
   --border:        rgba(242, 240, 234, 0.08);
@@ -41,11 +41,15 @@ html[data-theme="dark"] {
 
   /* Status */
   --green:         #4a9e6b;
-  --green-bg:      rgba(74, 158, 107, 0.10);
+  --green-bg:      rgba(74, 158, 107, 0.12);
+  --green-border:  rgba(74, 158, 107, 0.35);
   --red:           #b85b5b;
   --red-bg:        rgba(184, 91, 91, 0.10);
+  --red-border:    rgba(184, 91, 91, 0.30);
   --amber:         #b89b4a;
   --amber-bg:      rgba(184, 155, 74, 0.10);
+  
+  --win-glow:      rgba(184, 150, 110, 0.06);
 }
 
 /* ── LIGHT THEME ───────────────────────────────────────────── */

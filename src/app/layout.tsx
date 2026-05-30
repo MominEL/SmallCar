@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Syne } from "next/font/google";
 import "./globals.css";
-import { ThemeScript } from "@/components/ThemeToggle/ThemeScript";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -48,6 +47,7 @@ export const metadata: Metadata = {
 };
 
 import { GlobalToast } from "@/components/Compare/GlobalToast";
+import { ThemeScript } from "@/components/ThemeToggle/ThemeScript";
 
 export default function RootLayout({
   children,
