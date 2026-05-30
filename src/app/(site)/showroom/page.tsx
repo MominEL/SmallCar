@@ -50,8 +50,8 @@ export default async function ShowroomPage({
       <div className={styles.filters}>
         <div className="container">
           <div className={styles.filterList}>
-            <Link 
-              href="/showroom" 
+            <Link
+              href="/showroom"
               className={`${styles.filterBtn} ${!selectedMake ? styles.active : ""}`}
             >
               All cars
@@ -81,8 +81,8 @@ export default async function ShowroomPage({
                 // Only make the first item large if it's an editor's pick AND we aren't filtering (optional, but good practice)
                 const isFeatured = index === 0 && car.isEditorPick && !selectedMake;
                 return (
-                  <div 
-                    key={car._id} 
+                  <div
+                    key={car._id}
                     className={`${styles.gridItem} ${isFeatured ? styles.gridItemLarge : ""}`}
                   >
                     <CarCard car={car} featured={isFeatured} />
