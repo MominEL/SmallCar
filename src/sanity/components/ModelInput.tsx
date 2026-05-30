@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { TextInput, Stack, Text } from '@sanity/ui'
 import { StringInputProps, set, unset, useFormValue } from 'sanity'
+import offlineModels from '../data/offlineModels.json'
 
 export function ModelInput(props: StringInputProps) {
   const { value, onChange, path } = props
@@ -23,17 +24,25 @@ export function ModelInput(props: StringInputProps) {
       return
     }
 
+    // Load offline models from Cars_db.csv
+    const normalizedMake = actualMake.toLowerCase()
+    const offlineData = (offlineModels as Record<string, string[]>)[normalizedMake] || []
+    
     let isMounted = true
     setLoading(true)
     
-    // Fetch from free NHTSA API
+    // Set offline models immediately so user doesn't have to wait
+    setModels(offlineData)
+    
+    // Fetch from free NHTSA API to combine with offline data
     fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${encodeURIComponent(actualMake)}?format=json`)
       .then(res => res.json())
       .then(data => {
         if (isMounted && data.Results) {
           const fetchedModels = data.Results.map((r: any) => r.Model_Name)
-          // Filter duplicates and sort
-          setModels(Array.from(new Set(fetchedModels)).sort() as string[])
+          // Combine both databases, remove duplicates, and sort
+          const combined = Array.from(new Set([...offlineData, ...fetchedModels])).sort()
+          setModels(combined as string[])
         }
       })
       .catch(console.error)
