@@ -1,0 +1,75 @@
+/* ═══════════════════════════════════════════════════
+   Homepage — editorial, asymmetric, warm
+   ═══════════════════════════════════════════════════ */
+
+.page {
+  padding-top: 0; /* Hero goes edge to edge behind nav */
+}
+
+/* ── Featured section ──────── */
+.featured {
+  padding-top: clamp(48px, 8vw, 80px);
+  padding-bottom: clamp(48px, 8vw, 80px);
+}
+
+.featuredTitle {
+  font-size: clamp(28px, 4vw, 42px);
+  margin-bottom: 12px;
+}
+
+.featuredTitle em {
+  font-style: italic;
+  color: var(--gold-2);
+}
+
+.featuredSub {
+  color: var(--mid);
+  font-size: 13px;
+  line-height: 1.85;
+  max-width: 520px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+
+/* Asymmetric grid: first card large */
+.featuredGrid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 32px;
+  border: 1px solid var(--border);
+}
+
+.featuredGridItem {
+  background: var(--surface);
+}
+
+.featuredGridItemLarge {
+  grid-row: 1 / 3;
+}
+
+.emptyFeatured {
+  padding: 48px;
+  text-align: center;
+  color: var(--dim);
+  font-style: italic;
+}
+
+.featuredFooter {
+  text-align: center;
+  padding-top: 8px;
+}
+
+/* ── Responsive ──────────────── */
+@media (max-width: 768px) {
+  .featuredGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .featuredGridItemLarge {
+    grid-row: auto;
+  }
+}

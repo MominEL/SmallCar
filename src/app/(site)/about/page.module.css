@@ -1,0 +1,215 @@
+/* ═══════════════════════════════════════════════════
+   About Page
+   ═══════════════════════════════════════════════════ */
+
+.page {
+  padding-top: 100px;
+  min-height: 100vh;
+}
+
+/* ── Hero ─────────────────────── */
+.hero {
+  padding: clamp(48px, 6vw, 80px) 0;
+}
+
+.heroInner {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: clamp(42px, 6vw, 72px);
+  margin: 16px 0 clamp(40px, 6vw, 64px);
+  max-width: 800px;
+  line-height: 1;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--gold-2);
+}
+
+.heroImageWrap {
+  width: 100%;
+  aspect-ratio: 21/9;
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.heroImagePlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--surface-2) 0%, var(--surface-3) 100%);
+}
+
+.placeholderText {
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* ── Story Section ────────────── */
+.storyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: flex-start;
+}
+
+.sectionTitle {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  line-height: 1.1;
+  color: var(--ink);
+  margin-top: 16px;
+}
+
+.sectionTitle em {
+  font-style: italic;
+  color: var(--gold-2);
+}
+
+.fallbackText {
+  color: var(--mid);
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+/* ── Values ───────────────────── */
+.valuesSection {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: clamp(64px, 8vw, 96px) 0;
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(32px, 5vw, 64px);
+}
+
+.valueCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.valueNum {
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gold-border);
+}
+
+.valueTitle {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+
+.valueText {
+  font-size: 12px;
+  color: var(--mid);
+  line-height: 1.7;
+}
+
+/* ── Team ─────────────────────── */
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: clamp(40px, 6vw, 64px);
+}
+
+.teamCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 32px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.teamCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold-border);
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--gold-bg);
+  border: 1px solid var(--gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.memberName {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.memberRole {
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.memberBio {
+  font-size: 11px;
+  color: var(--dim);
+  line-height: 1.6;
+}
+
+/* ── Responsive ──────────────── */
+@media (max-width: 900px) {
+  .heroImageWrap {
+    aspect-ratio: 16/9;
+  }
+
+  .storyGrid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .valuesGrid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .teamGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .teamGrid {
+    grid-template-columns: 1fr;
+  }
+}

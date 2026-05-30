@@ -1,0 +1,181 @@
+/* ═══════════════════════════════════════════════════
+   CarCard — expanding specs on hover
+   ═══════════════════════════════════════════════════ */
+
+.card {
+  background: var(--surface);
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  transition: background 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.card:hover {
+  background: var(--surface-2);
+}
+
+/* Gold edge on hover */
+.card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  height: 0;
+  background: var(--gold);
+  transition: height 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover::after {
+  height: 100%;
+}
+
+.imageWrap {
+  width: 100%;
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-3);
+}
+
+.featured .imageWrap {
+  aspect-ratio: 16/9;
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 1px;
+  background: rgba(184, 150, 110, 0.85); /* gold */
+  color: #000;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-weight: 700;
+}
+
+html[data-theme="light"] .badge {
+  color: #fff;
+}
+
+.info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.year {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 4px;
+}
+
+.name {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.shortSpec {
+  font-size: 11px;
+  color: var(--mid);
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.fullSpec {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -20px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+.specRow span {
+  color: var(--dim);
+}
+
+.specRow strong {
+  font-weight: 400;
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .card:hover .shortSpec {
+    opacity: 0;
+  }
+
+  .card:hover .fullSpec {
+    opacity: 1;
+    max-height: 200px;
+    margin-top: 8px;
+  }
+}
+
+.bottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.price {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.cta {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mid);
+  transition: color 0.2s ease;
+}
+
+.card:hover .cta {
+  color: var(--gold);
+}
+
+@media (max-width: 768px) {
+  .featured .imageWrap {
+    aspect-ratio: 4/3;
+  }
+}

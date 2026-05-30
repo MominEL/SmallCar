@@ -1,0 +1,147 @@
+.page {
+  padding-top: 100px; /* Offset for fixed nav */
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ── Header ───────────────────── */
+.header {
+  padding: clamp(48px, 6vw, 80px) 0 clamp(32px, 4vw, 56px);
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-size: clamp(42px, 6vw, 64px);
+  margin: 16px 0 24px;
+}
+
+.title em {
+  font-style: italic;
+  color: var(--gold-2);
+}
+
+.subtitle {
+  font-size: 13px;
+  color: var(--mid);
+  max-width: 540px;
+  line-height: 1.8;
+}
+
+/* ── Filters ──────────────────── */
+.filters {
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 72px; /* Nav height */
+  z-index: 90;
+}
+
+.filterList {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 16px 0;
+  scrollbar-width: none; /* Firefox */
+}
+
+.filterList::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.filterBtn {
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  color: var(--dim);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+  padding: 4px 0;
+  position: relative;
+}
+
+.filterBtn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.filterBtn:hover {
+  color: var(--ink);
+}
+
+.filterBtn.active {
+  color: var(--gold);
+}
+
+.filterBtn.active::after {
+  width: 100%;
+}
+
+/* ── Grid ─────────────────────── */
+.gridSection {
+  padding: clamp(40px, 6vw, 80px) 0;
+  background: var(--bg);
+}
+
+.empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--mid);
+  font-size: 13px;
+  font-style: italic;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+/* Base grid: 3 columns */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px; /* border hack */
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.gridItem {
+  background: var(--surface);
+}
+
+/* Featured item spans 2 columns and 2 rows if space allows */
+.gridItemLarge {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* ── Responsive ──────────────── */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gridItemLarge {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gridItemLarge {
+    grid-column: 1;
+  }
+}
