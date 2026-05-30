@@ -1,21 +1,21 @@
 .container {
-  background: var(--color-surface);
-  border: 1px solid rgba(242, 240, 234, 0.1);
+  background: var(--surface);
+  border: 1px solid var(--border);
   padding: 30px;
-  border-radius: 4px;
+  border-radius: var(--radius);
 }
 
 .title {
   font-family: var(--font-playfair);
   font-size: 1.5rem;
   font-weight: 400;
-  color: var(--color-text);
+  color: var(--ink);
   margin-bottom: 10px;
 }
 
 .desc {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
+  font-size: 13px;
+  color: var(--mid);
   line-height: 1.5;
   margin-bottom: 25px;
 }
@@ -33,45 +33,48 @@
 }
 
 .field label {
-  font-size: 0.85rem;
+  font-size: 9px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text-light);
+  letter-spacing: 0.22em;
+  color: var(--dim);
 }
 
 .field input {
-  padding: 12px 15px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(242, 240, 234, 0.1);
-  border-radius: 2px;
-  color: var(--color-text);
-  font-family: inherit;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--ink);
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 12px;
+  transition: all 0.2s ease;
 }
 
 .field input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--gold-border);
+  background: var(--surface-3);
 }
 
 .submitBtn {
-  background: var(--color-primary);
-  color: var(--color-background);
+  background: var(--gold);
+  color: var(--bg);
   padding: 14px;
   border: none;
-  border-radius: 2px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  border-radius: var(--radius);
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   cursor: pointer;
   margin-top: 10px;
-  transition: background 0.3s ease;
+  transition: background 0.2s ease;
 }
 
 .submitBtn:hover:not(:disabled) {
-  background: #fff;
+  background: var(--gold-2);
 }
 
 .submitBtn:disabled {
@@ -80,33 +83,34 @@
 }
 
 .successBox {
-  background: rgba(74, 158, 107, 0.1);
+  background: var(--green-bg);
   border: 1px solid rgba(74, 158, 107, 0.3);
   padding: 30px;
-  border-radius: 4px;
+  border-radius: var(--radius);
   text-align: center;
 }
 
 .icon {
   font-size: 2rem;
-  color: #4a9e6b;
+  color: var(--green);
   margin-bottom: 15px;
 }
 
 .successBox h3 {
+  font-family: var(--font-playfair);
   font-size: 1.25rem;
-  color: #4a9e6b;
+  color: var(--green);
   margin-bottom: 10px;
 }
 
 .successBox p {
-  color: var(--color-text-muted);
-  font-size: 0.95rem;
+  color: var(--mid);
+  font-size: 13px;
   line-height: 1.5;
 }
 
 .error {
-  color: #b85b5b;
-  font-size: 0.85rem;
+  color: var(--red);
+  font-size: 11px;
   margin-top: -5px;
 }

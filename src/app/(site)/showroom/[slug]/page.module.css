@@ -47,7 +47,7 @@
 
 .badgeSold {
   background: var(--red-bg);
-  border-color: rgba(184, 91, 91, 0.3);
+  border-color: var(--red);
   color: var(--red);
 }
 

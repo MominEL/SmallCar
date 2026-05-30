@@ -10,24 +10,26 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: var(--color-primary);
-  color: var(--color-background);
+  background: var(--gold);
+  color: var(--bg);
   padding: 14px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   text-decoration: none;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
 }
 
 .callBtn:hover {
-  background: #fff;
-  transform: translateY(-2px);
+  background: var(--gold-2);
 }
 
 .callBtn svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 .shareBtn {
@@ -36,22 +38,25 @@
   justify-content: center;
   gap: 10px;
   background: transparent;
-  color: var(--color-text);
-  border: 1px solid rgba(242, 240, 234, 0.2);
+  color: var(--ink);
+  border: 1px solid var(--border);
   padding: 14px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  border-radius: 4px;
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .shareBtn:hover {
-  border-color: var(--color-text);
-  background: rgba(242, 240, 234, 0.05);
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 .shareBtn svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }

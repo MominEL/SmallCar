@@ -65,8 +65,8 @@
   text-transform: uppercase;
   padding: 5px 10px;
   border-radius: 1px;
-  background: rgba(184, 150, 110, 0.85); /* gold */
-  color: #000;
+  background: var(--gold);
+  color: var(--bg);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   font-weight: 700;
@@ -77,11 +77,11 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(14, 13, 12, 0.6);
+  background: var(--surface);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(242, 240, 234, 0.1);
-  color: var(--color-text-light);
+  border: 1px solid var(--border);
+  color: var(--dim);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -97,29 +97,25 @@
   width: 16px;
   height: 16px;
   transition: transform 0.3s ease;
-  color: #f2f0ea;
+  color: currentColor;
 }
 
 .heartBtn:hover {
-  background: rgba(242, 240, 234, 0.9);
+  background: var(--surface-2);
+  color: var(--red);
 }
 
 .heartBtn:hover svg {
-  color: #b85b5b;
   transform: scale(1.1);
 }
 
 .heartBtn.favourited {
-  border-color: rgba(184, 91, 91, 0.4);
+  border-color: var(--red);
+  color: var(--red);
 }
 
 .heartBtn.favourited svg {
-  fill: #b85b5b;
-  color: #b85b5b;
-}
-
-html[data-theme="light"] .badge {
-  color: #fff;
+  fill: var(--red);
 }
 
 .info {

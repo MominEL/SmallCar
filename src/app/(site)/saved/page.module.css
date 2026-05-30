@@ -7,7 +7,7 @@
 
 .header {
   margin-bottom: 40px;
-  border-bottom: 1px solid rgba(242, 240, 234, 0.1);
+  border-bottom: 1px solid var(--border);
   padding-bottom: 30px;
 }
 
@@ -15,20 +15,20 @@
   font-family: var(--font-playfair);
   font-size: 3rem;
   font-weight: 400;
-  color: var(--color-text);
+  color: var(--ink);
   margin-bottom: 10px;
 }
 
 .subtitle {
-  font-size: 1rem;
-  color: var(--color-text-muted);
+  font-size: 13px;
+  color: var(--mid);
   max-width: 600px;
   line-height: 1.6;
 }
 
 .loading {
-  font-size: 1.1rem;
-  color: var(--color-text-muted);
+  font-size: 14px;
+  color: var(--mid);
   text-align: center;
   padding: 50px 0;
 }
@@ -42,31 +42,32 @@
 .empty {
   text-align: center;
   padding: 80px 0;
-  background: var(--color-surface);
-  border: 1px solid rgba(242, 240, 234, 0.05);
-  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 .empty p {
-  font-size: 1.2rem;
-  color: var(--color-text-muted);
+  font-size: 14px;
+  color: var(--mid);
   margin-bottom: 30px;
 }
 
 .btn {
   display: inline-block;
-  background: var(--color-primary);
-  color: var(--color-background);
+  background: var(--gold);
+  color: var(--bg);
   padding: 14px 30px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.18em;
   text-decoration: none;
-  border-radius: 2px;
-  transition: all 0.3s ease;
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
 }
 
 .btn:hover {
-  background: #fff;
+  background: var(--gold-2);
 }
