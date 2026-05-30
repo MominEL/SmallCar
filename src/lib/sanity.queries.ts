@@ -60,9 +60,9 @@ export const carBySlugQuery = groq`
   }
 `;
 
-// ── Featured cars for homepage (1 editor pick + 2 featured) ──
+// ── Featured cars for homepage (Always returns 3 cars, prioritizes Editor's Pick & Featured) ──
 export const featuredCarsQuery = groq`
-  *[_type == "car" && !isSold && (isEditorPick == true || isFeatured == true)] | order(isEditorPick desc, dateAdded desc)[0..2] {
+  *[_type == "car" && !isSold] | order(isEditorPick desc, isFeatured desc, dateAdded desc)[0..2] {
     _id,
     model,
     variant,
