@@ -45,9 +45,9 @@ export function EnquiryForm({ carName, carId }: EnquiryFormProps) {
     return (
       <div className={`${styles.form} ${styles.success}`}>
         <div className={styles.icon}>✓</div>
-        <h4 className={styles.successTitle}>Enquiry sent</h4>
+        <h4 className={styles.successTitle}>{carId ? "Enquiry sent" : "Message sent"}</h4>
         <p className={styles.successText}>
-          Thank you. We have received your enquiry about the {carName}. 
+          Thank you. We have received your {carId ? `enquiry about the ${carName}` : "message"}. 
           We aim to respond to all messages on the same day.
         </p>
         <button className="btn btn-ghost" onClick={() => setStatus("idle")}>
@@ -60,7 +60,7 @@ export function EnquiryForm({ carName, carId }: EnquiryFormProps) {
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.header}>
-        <h3 className={styles.title}>Enquire about this car</h3>
+        <h3 className={styles.title}>{carId ? "Enquire about this car" : "Send us a message"}</h3>
         <p className={styles.subtitle}>
           No pressure, no obligation. Ask us a question or arrange a viewing.
         </p>
@@ -89,7 +89,7 @@ export function EnquiryForm({ carName, carId }: EnquiryFormProps) {
             id="message" 
             name="message" 
             required 
-            placeholder={`I'm interested in the ${carName}...`}
+            placeholder={carId ? `I'm interested in the ${carName}...` : "How can we help you?"}
           />
         </div>
       </div>
@@ -105,7 +105,7 @@ export function EnquiryForm({ carName, carId }: EnquiryFormProps) {
         className={`btn btn-primary ${styles.submit}`}
         disabled={status === "loading"}
       >
-        {status === "loading" ? "Sending..." : "Send enquiry"}
+        {status === "loading" ? "Sending..." : carId ? "Send enquiry" : "Send message"}
       </button>
 
       <p className={styles.note}>
