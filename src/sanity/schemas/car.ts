@@ -7,9 +7,22 @@ export const car = defineType({
   name: "car",
   title: "Car",
   type: "document",
+  groups: [
+    { name: "basics", title: "Basic Details", default: true },
+    { name: "specs", title: "Technical Specs" },
+    { name: "media", title: "Media & Story" },
+    { name: "history", title: "History" },
+    { name: "promo", title: "Status & Promos" },
+  ],
+  fieldsets: [
+    { name: "performance", title: "Performance", options: { columns: 2 } },
+    { name: "efficiency", title: "Efficiency", options: { columns: 2 } },
+    { name: "status", title: "Listing Status", options: { columns: 2 } },
+  ],
   fields: [
     defineField({
       name: "slug",
+      group: "basics",
       title: "Slug",
       type: "slug",
       options: { 
@@ -20,6 +33,7 @@ export const car = defineType({
     }),
     defineField({
       name: "make",
+      group: "basics",
       title: "Make",
       type: "string",
       options: {
@@ -43,6 +57,7 @@ export const car = defineType({
     }),
     defineField({
       name: "customMake",
+      group: "basics",
       title: "Custom Make",
       type: "string",
       description: "Please type the car make since you selected 'Other'",
@@ -57,6 +72,7 @@ export const car = defineType({
     }),
     defineField({
       name: "model",
+      group: "basics",
       title: "Model",
       type: "string",
       description: 'e.g. "Cooper S", "500", "Polo". Start typing to see suggestions.',
@@ -65,12 +81,14 @@ export const car = defineType({
     }),
     defineField({
       name: "variant",
+      group: "basics",
       title: "Variant / Trim",
       type: "string",
       description: 'e.g. "Resolute Edition", "Dolcevita", "GTI"',
     }),
     defineField({
       name: "bodyType",
+      group: "basics",
       title: "Body Type",
       type: "string",
       options: {
@@ -87,6 +105,7 @@ export const car = defineType({
     }),
     defineField({
       name: "badge",
+      group: "promo",
       title: "Badge",
       type: "string",
       description: "Optional promotional badge shown on the listing card",
@@ -103,6 +122,7 @@ export const car = defineType({
     }),
     defineField({
       name: "photos",
+      group: "media",
       title: "Photos",
       type: "array",
       of: [{ type: "cloudinary.asset" }],
@@ -111,12 +131,14 @@ export const car = defineType({
     }),
     defineField({
       name: "year",
+      group: "basics",
       title: "Registration Year",
       type: "number",
       validation: (rule) => rule.required().min(1990).max(2030),
     }),
     defineField({
       name: "mileage",
+      group: "basics",
       title: "Mileage",
       type: "number",
       description: "Stored as number — displayed with comma separator",
@@ -124,6 +146,7 @@ export const car = defineType({
     }),
     defineField({
       name: "price",
+      group: "basics",
       title: "Price (£)",
       type: "number",
       description: "Stored as number — displayed with £ and commas",
@@ -131,6 +154,7 @@ export const car = defineType({
     }),
     defineField({
       name: "gearbox",
+      group: "specs",
       title: "Gearbox",
       type: "string",
       options: {
@@ -140,40 +164,52 @@ export const car = defineType({
     }),
     defineField({
       name: "colour",
+      group: "basics",
       title: "Colour",
       type: "string",
     }),
     defineField({
       name: "engine",
+      group: "specs",
+      fieldset: "performance",
       title: "Engine",
       type: "string",
       description: 'e.g. "2.0T TwinPower"',
     }),
     defineField({
       name: "bhp",
+      group: "specs",
+      fieldset: "performance",
       title: "Power (bhp)",
       type: "number",
     }),
     defineField({
       name: "zeroToSixty",
+      group: "specs",
+      fieldset: "performance",
       title: "0–60 mph",
       type: "string",
       description: 'e.g. "6.7 seconds"',
     }),
     defineField({
       name: "topSpeed",
+      group: "specs",
+      fieldset: "performance",
       title: "Top Speed",
       type: "string",
       description: 'e.g. "140 mph"',
     }),
     defineField({
       name: "interior",
+      group: "media",
       title: "Interior",
       type: "string",
       description: 'e.g. "Black leather sport seats"',
     }),
     defineField({
       name: "fuelType",
+      group: "specs",
+      fieldset: "efficiency",
       title: "Fuel Type",
       type: "string",
       options: {
@@ -182,35 +218,42 @@ export const car = defineType({
     }),
     defineField({
       name: "economy",
+      group: "specs",
+      fieldset: "efficiency",
       title: "Fuel Economy",
       type: "string",
       description: 'e.g. "42.2 mpg combined"',
     }),
     defineField({
       name: "motExpiry",
+      group: "history",
       title: "MOT Expiry",
       type: "date",
     }),
     defineField({
       name: "owners",
+      group: "history",
       title: "Previous Owners",
       type: "number",
       validation: (rule) => rule.min(0),
     }),
     defineField({
       name: "serviceHistory",
+      group: "history",
       title: "Service History",
       type: "string",
       description: 'e.g. "Full MINI service history"',
     }),
     defineField({
       name: "hpiClear",
+      group: "history",
       title: "HPI Clear",
       type: "boolean",
       initialValue: true,
     }),
     defineField({
       name: "description",
+      group: "media",
       title: "Description",
       type: "array",
       of: [{ type: "block" }],
@@ -219,6 +262,8 @@ export const car = defineType({
     }),
     defineField({
       name: "isEditorPick",
+      group: "promo",
+      fieldset: "status",
       title: "Editor's Pick",
       type: "boolean",
       initialValue: false,
@@ -241,6 +286,8 @@ export const car = defineType({
     }),
     defineField({
       name: "isFeatured",
+      group: "promo",
+      fieldset: "status",
       title: "Featured on Homepage",
       type: "boolean",
       initialValue: false,
@@ -248,6 +295,8 @@ export const car = defineType({
     }),
     defineField({
       name: "isSold",
+      group: "promo",
+      fieldset: "status",
       title: "Sold",
       type: "boolean",
       initialValue: false,
@@ -256,6 +305,8 @@ export const car = defineType({
     }),
     defineField({
       name: "dateAdded",
+      group: "promo",
+      fieldset: "status",
       title: "Date Added",
       type: "datetime",
       initialValue: () => new Date().toISOString(),
