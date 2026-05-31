@@ -16,12 +16,11 @@ export function CompareButton({ slug, variant = "icon" }: CompareButtonProps) {
   const active = isCompared(slug);
 
   const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigating if inside a link
+    e.preventDefault();
     e.stopPropagation();
     const result = toggleCompare(slug);
-    if (result.limitReached) {
-      alert("You can only compare up to 3 cars at a time.");
-    }
+    // No alert — the GlobalToast will handle messaging.
+    // If limit reached, we do nothing (button is already a no-op).
   };
 
   const scaleIcon = (

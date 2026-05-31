@@ -1,94 +1,102 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+
+const STORAGE_KEY = "smallcar_compare";
+const MAX_COMPARE = 3;
+
+/** Read the current compare list straight from localStorage (always fresh). */
+function readStorage(): string[] {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch {}
+  return [];
+}
+
+/** Write to localStorage + dispatch a sync event so every hook instance updates. */
+function writeStorage(cars: string[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
+    window.dispatchEvent(
+      new CustomEvent("compareUpdated", { detail: cars })
+    );
+  } catch {}
+}
 
 export function useCompare() {
   const [compareCars, setCompareCars] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
 
+  // ── Mount: hydrate from localStorage ──────────────────────────────
   useEffect(() => {
     setMounted(true);
-    const loadFromStorage = () => {
-      try {
-        const stored = localStorage.getItem("smallcar_compare");
-        if (stored) {
-          setCompareCars(JSON.parse(stored));
-        }
-      } catch (e) {
-        console.error("Error reading compare cars from localStorage", e);
-      }
-    };
+    setCompareCars(readStorage());
 
-    loadFromStorage();
-
-    // Listen to custom event for syncing across components on the same tab
     const handleCompareUpdated = (e: Event) => {
-      const customEvent = e as CustomEvent<string[]>;
-      setCompareCars(customEvent.detail);
+      const detail = (e as CustomEvent<string[]>).detail;
+      setCompareCars(Array.isArray(detail) ? detail : []);
     };
 
-    // Listen to storage event for syncing across tabs
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === "smallcar_compare") {
-        loadFromStorage();
-      }
+      if (e.key === STORAGE_KEY) setCompareCars(readStorage());
     };
 
     window.addEventListener("compareUpdated", handleCompareUpdated);
     window.addEventListener("storage", handleStorage);
-
     return () => {
       window.removeEventListener("compareUpdated", handleCompareUpdated);
       window.removeEventListener("storage", handleStorage);
     };
   }, []);
 
-  const toggleCompare = (slug: string) => {
-    // Always read the LATEST data from localStorage — React state can be stale
-    // because each CompareButton creates its own hook instance.
-    let currentCars: string[] = [];
-    try {
-      const stored = localStorage.getItem("smallcar_compare");
-      if (stored) currentCars = JSON.parse(stored);
-    } catch (e) {}
+  // ── Toggle: add or remove a car ───────────────────────────────────
+  const toggleCompare = useCallback((slug: string) => {
+    // ALWAYS read the latest from localStorage — React state can be stale.
+    const current = readStorage();
 
-    if (currentCars.includes(slug)) {
-      // Already in list — remove it
-      const newCompare = currentCars.filter((s) => s !== slug);
-      setCompareCars(newCompare);
-      try {
-        localStorage.setItem("smallcar_compare", JSON.stringify(newCompare));
-        window.dispatchEvent(new CustomEvent("compareUpdated", { detail: newCompare }));
-      } catch (e) {}
+    if (current.includes(slug)) {
+      const next = current.filter((s) => s !== slug);
+      setCompareCars(next);
+      writeStorage(next);
       return { added: false, limitReached: false };
     }
 
-    if (currentCars.length >= 3) {
+    if (current.length >= MAX_COMPARE) {
       return { added: false, limitReached: true };
     }
 
-    // Add it
-    const newCompare = [...currentCars, slug];
-    setCompareCars(newCompare);
-    try {
-      localStorage.setItem("smallcar_compare", JSON.stringify(newCompare));
-      window.dispatchEvent(new CustomEvent("compareUpdated", { detail: newCompare }));
-    } catch (e) {}
+    const next = [...current, slug];
+    setCompareCars(next);
+    writeStorage(next);
     return { added: true, limitReached: false };
-  };
+  }, []);
 
-  const removeCompare = (slug: string) => {
-    setCompareCars((prev) => {
-      const newCompare = prev.filter((s) => s !== slug);
-      try {
-        localStorage.setItem("smallcar_compare", JSON.stringify(newCompare));
-        window.dispatchEvent(new CustomEvent("compareUpdated", { detail: newCompare }));
-      } catch (e) {}
-      return newCompare;
-    });
-  };
+  // ── Remove a specific car ─────────────────────────────────────────
+  const removeCompare = useCallback((slug: string) => {
+    const current = readStorage();
+    const next = current.filter((s) => s !== slug);
+    setCompareCars(next);
+    writeStorage(next);
+  }, []);
+
+  // ── Clear all ─────────────────────────────────────────────────────
+  const clearCompare = useCallback(() => {
+    setCompareCars([]);
+    writeStorage([]);
+  }, []);
 
   const isCompared = (slug: string) => compareCars.includes(slug);
 
-  return { compareCars, toggleCompare, removeCompare, isCompared, mounted };
+  return {
+    compareCars,
+    toggleCompare,
+    removeCompare,
+    clearCompare,
+    isCompared,
+    mounted,
+  };
 }

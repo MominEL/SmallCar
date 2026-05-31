@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useCompare } from "@/hooks/useCompare";
 import Link from "next/link";
 import styles from "./GlobalToast.module.css";
@@ -9,32 +9,51 @@ export function GlobalToast() {
   const { compareCars, mounted } = useCompare();
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("");
+  const prevCountRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Initialise the ref once mounted
+  useEffect(() => {
+    if (mounted) prevCountRef.current = compareCars.length;
+  }, [mounted]);
 
   useEffect(() => {
     if (!mounted) return;
-    let prevCount = compareCars.length;
 
     const handleUpdated = (e: Event) => {
-      const customEvent = e as CustomEvent<string[]>;
-      const count = customEvent.detail.length;
-      const wasAdded = count > prevCount;
-      prevCount = count;
+      const detail = (e as CustomEvent<string[]>).detail;
+      const count = Array.isArray(detail) ? detail.length : 0;
+      const prev = prevCountRef.current;
+      prevCountRef.current = count;
 
-      if (wasAdded && count <= 3) {
+      // Clear any existing timer
+      if (timerRef.current) clearTimeout(timerRef.current);
+
+      if (count > prev && count <= 3) {
         setMessage(`Added to compare (${count}/3)`);
         setShow(true);
-        setTimeout(() => setShow(false), 5000);
-      } else if (!wasAdded && count > 0) {
-        setMessage(`Removed — ${count} car${count !== 1 ? "s" : ""} in compare`);
+        timerRef.current = setTimeout(() => setShow(false), 4000);
+      } else if (count < prev && count > 0) {
+        setMessage(`Removed — ${count} car${count !== 1 ? "s" : ""} left`);
         setShow(true);
-        setTimeout(() => setShow(false), 3000);
+        timerRef.current = setTimeout(() => setShow(false), 3000);
       } else if (count === 0) {
-        setShow(false);
+        setMessage("Compare list cleared");
+        setShow(true);
+        timerRef.current = setTimeout(() => setShow(false), 2000);
+      } else if (count === prev) {
+        // Limit reached — count didn't change
+        setMessage("Compare is full (3/3) — remove one first");
+        setShow(true);
+        timerRef.current = setTimeout(() => setShow(false), 3000);
       }
     };
 
     window.addEventListener("compareUpdated", handleUpdated);
-    return () => window.removeEventListener("compareUpdated", handleUpdated);
+    return () => {
+      window.removeEventListener("compareUpdated", handleUpdated);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   }, [mounted]);
 
   if (!mounted || !show) return null;
@@ -44,10 +63,14 @@ export function GlobalToast() {
       <div className={styles.content}>
         <span>{message}</span>
         <div className={styles.actions}>
-          {compareCars.length < 3 && <span className={styles.hint}>Add another or</span>}
-          <Link href="/compare" className={styles.link} onClick={() => setShow(false)}>
-            View comparison →
-          </Link>
+          {compareCars.length > 0 && compareCars.length < 3 && (
+            <span className={styles.hint}>Add another or</span>
+          )}
+          {compareCars.length > 0 && (
+            <Link href="/compare" className={styles.link} onClick={() => setShow(false)}>
+              View comparison →
+            </Link>
+          )}
         </div>
       </div>
       <button className={styles.close} onClick={() => setShow(false)}>✕</button>
