@@ -78,68 +78,91 @@ export default function ComparePage() {
     );
   }
 
-  // Calculate Winners
-  const getWinners = (field: string, type: "high" | "low" = "high", isNumeric: boolean = true) => {
+  // ── Value parser: strips non-numeric chars, returns NaN-safe float ──
+  const parseVal = (val: any): number => {
+    if (val === null || val === undefined) return NaN;
+    const parsed = parseFloat(String(val).replace(/[^0-9.]/g, ""));
+    return isNaN(parsed) ? NaN : parsed;
+  };
+
+  // ── Generic numeric winner calculator ──────────────────────────────
+  // Returns array of winning _ids. Returns [] when ALL cars tie or any
+  // car has a missing/zero/NaN value for the field (no win vs empty).
+  const getNumericWinners = (
+    field: string,
+    type: "high" | "low"
+  ): string[] => {
     if (cars.length < 2) return [];
-    
-    let validCars = cars.filter(c => c[field] !== undefined && c[field] !== null && c[field] !== "");
-    if (validCars.length < 2) return [];
 
-    let bestValue = isNumeric ? parseFloat(validCars[0][field]) : validCars[0][field];
+    // Only consider cars that have a real, non-zero value
+    const valid = cars.filter(c => {
+      const v = parseVal(c[field]);
+      return !isNaN(v) && v > 0;
+    });
+    if (valid.length < 2) return []; // can't compare if < 2 have data
 
-    for (let i = 1; i < validCars.length; i++) {
-      const val = isNumeric ? parseFloat(validCars[i][field]) : validCars[i][field];
-      if (type === "high" && val > bestValue) {
-        bestValue = val;
-      } else if (type === "low" && val < bestValue) {
-        bestValue = val;
-      }
-    }
-    
-    const winners = validCars.filter(c => {
-      const val = isNumeric ? parseFloat(c[field]) : c[field];
-      return val === bestValue;
-    }).map(c => c._id);
-    
-    if (winners.length === validCars.length) return [];
+    const values = valid.map(c => parseVal(c[field]));
+    const best = type === "high" ? Math.max(...values) : Math.min(...values);
+
+    const winners = valid.filter(c => parseVal(c[field]) === best).map(c => c._id);
+
+    // If every valid car ties → no winner
+    if (winners.length === valid.length) return [];
     return winners;
   };
 
-  const getCheapestCars = () => {
-    if (cars.length < 2) return [];
-    let validCars = cars.filter(c => c.price !== undefined && c.price !== null && c.price !== "");
-    if (validCars.length < 2) return [];
-    
-    let min = parseFloat(validCars[0].price);
-    for (let i = 1; i < validCars.length; i++) {
-      const price = parseFloat(validCars[i].price);
-      if (price < min) {
-        min = price;
-      }
-    }
-    const winners = validCars.filter(c => parseFloat(c.price) === min).map(c => c._id);
-    if (winners.length === validCars.length) return [];
-    return winners;
+  // ── Losers helper (cars that are NOT winners and DO have a value) ───
+  const getLosers = (field: string, winners: string[]): string[] => {
+    if (winners.length === 0) return [];
+    return cars
+      .filter(c => {
+        const v = parseVal(c[field]);
+        return !isNaN(v) && v > 0 && !winners.includes(c._id);
+      })
+      .map(c => c._id);
   };
 
-  const bhpWinners = getWinners("bhp", "high", true);
-  const speedWinners = getWinners("topSpeed", "high", true);
-  const accelWinners = getWinners("zeroToSixty", "low", true);
-  const mileageWinners = getWinners("mileage", "low", true);
-  const economyWinners = getWinners("economy", "high", true);
-  const ownersWinners = getWinners("owners", "low", true);
-  const cheapestCars = getCheapestCars();
-
-  const getHistoryWinners = () => {
+  // ── Service history winner ──────────────────────────────────────────
+  const getHistoryWinners = (): string[] => {
     if (cars.length < 2) return [];
-    const validCars = cars.filter(c => c.serviceHistory !== undefined && c.serviceHistory !== null && c.serviceHistory !== "");
-    if (validCars.length < 2) return [];
-    
-    const fullCars = validCars.filter(c => c.serviceHistory.toLowerCase().includes("full") || c.serviceHistory.toLowerCase().includes("fill"));
-    if (fullCars.length === validCars.length || fullCars.length === 0) return [];
+    const valid = cars.filter(c => {
+      const v = c.serviceHistory;
+      return v !== null && v !== undefined && String(v).trim() !== "";
+    });
+    if (valid.length < 2) return [];
+
+    const fullCars = valid.filter(c =>
+      String(c.serviceHistory).toLowerCase().trim().includes("full")
+    );
+    // If ALL have full or NONE have full → tie, no winner
+    if (fullCars.length === valid.length || fullCars.length === 0) return [];
     return fullCars.map(c => c._id);
   };
-  const historyWinners = getHistoryWinners();
+
+  // ── Pre-compute all winners ─────────────────────────────────────────
+  const bhpWinners      = getNumericWinners("bhp",         "high");
+  const speedWinners    = getNumericWinners("topSpeed",    "high");
+  const accelWinners    = getNumericWinners("zeroToSixty", "low");
+  const mileageWinners  = getNumericWinners("mileage",     "low");
+  const economyWinners  = getNumericWinners("economy",     "high");
+  const ownersWinners   = getNumericWinners("owners",      "low");
+  const cheapestCars    = getNumericWinners("price",       "low");
+  const historyWinners  = getHistoryWinners();
+
+  // Pre-compute losers
+  const bhpLosers     = getLosers("bhp",         bhpWinners);
+  const speedLosers   = getLosers("topSpeed",    speedWinners);
+  const accelLosers   = getLosers("zeroToSixty", accelWinners);
+  const mileageLosers = getLosers("mileage",     mileageWinners);
+  const economyLosers = getLosers("economy",     economyWinners);
+  const ownersLosers  = getLosers("owners",      ownersWinners);
+  const priceLosers   = getLosers("price",       cheapestCars);
+  const historyLosers = historyWinners.length > 0
+    ? cars.filter(c => {
+        const v = c.serviceHistory;
+        return v !== null && v !== undefined && String(v).trim() !== "" && !historyWinners.includes(c._id);
+      }).map(c => c._id)
+    : [];
 
   return (
     <main className={styles.page}>
@@ -186,7 +209,7 @@ export default function ComparePage() {
                     </div>
                     <div className={styles.carName}>{car.name}</div>
                     <div className={styles.carYear}>{car.year} · {car.mileage?.toLocaleString()} miles</div>
-                    <div className={`${styles.carPrice} ${cheapestCar === car._id ? styles.carPriceCheaper : ""}`}>
+                    <div className={`${styles.carPrice} ${cheapestCars.includes(car._id) ? styles.carPriceCheaper : ""}`}>
                       £{car.price?.toLocaleString()}
                     </div>
                     <div className={styles.carBtns}>
@@ -226,11 +249,11 @@ export default function ComparePage() {
               <tr>
                 <td className={styles.rowLabelCell}><span className={styles.labelText}>Power (bhp)</span></td>
                 {cars.map(car => {
-                  const isWin = bhpWinners.includes(car._id);
-                  const hasWinner = bhpWinners.length > 0;
+                  const isWin  = bhpWinners.includes(car._id);
+                  const isLose = bhpLosers.includes(car._id);
                   return (
-                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : (hasWinner ? styles.valCellLose : "")}`}>
-                      <div className={`${styles.val} ${isWin ? styles.valWin : (hasWinner ? styles.valLose : "")}`}>
+                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : isLose ? styles.valCellLose : ""}`}>
+                      <div className={`${styles.val} ${isWin ? styles.valWin : isLose ? styles.valLose : ""}`}>
                         {car.bhp || "N/A"} {isWin && <span className={styles.winTag}>Higher</span>}
                       </div>
                     </td>
@@ -240,11 +263,11 @@ export default function ComparePage() {
               <tr>
                 <td className={styles.rowLabelCell}><span className={styles.labelText}>0-60 mph</span></td>
                 {cars.map(car => {
-                  const isWin = accelWinners.includes(car._id);
-                  const hasWinner = accelWinners.length > 0;
+                  const isWin  = accelWinners.includes(car._id);
+                  const isLose = accelLosers.includes(car._id);
                   return (
-                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : (hasWinner ? styles.valCellLose : "")}`}>
-                      <div className={`${styles.val} ${isWin ? styles.valWin : (hasWinner ? styles.valLose : "")}`}>
+                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : isLose ? styles.valCellLose : ""}`}>
+                      <div className={`${styles.val} ${isWin ? styles.valWin : isLose ? styles.valLose : ""}`}>
                         {car.zeroToSixty ? `${car.zeroToSixty}s` : "N/A"} {isWin && <span className={styles.winTag}>Faster</span>}
                       </div>
                     </td>
@@ -259,11 +282,11 @@ export default function ComparePage() {
               <tr>
                 <td className={styles.rowLabelCell}><span className={styles.labelText}>Mileage</span></td>
                 {cars.map(car => {
-                  const isWin = mileageWinners.includes(car._id);
-                  const hasWinner = mileageWinners.length > 0;
+                  const isWin  = mileageWinners.includes(car._id);
+                  const isLose = mileageLosers.includes(car._id);
                   return (
-                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : (hasWinner ? styles.valCellLose : "")}`}>
-                      <div className={`${styles.val} ${isWin ? styles.valWin : (hasWinner ? styles.valLose : "")}`}>
+                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : isLose ? styles.valCellLose : ""}`}>
+                      <div className={`${styles.val} ${isWin ? styles.valWin : isLose ? styles.valLose : ""}`}>
                         {car.mileage?.toLocaleString() || "N/A"} {isWin && <span className={styles.winTag}>Lower</span>}
                       </div>
                     </td>
@@ -273,11 +296,11 @@ export default function ComparePage() {
               <tr>
                 <td className={styles.rowLabelCell}><span className={styles.labelText}>Economy (mpg)</span></td>
                 {cars.map(car => {
-                  const isWin = economyWinners.includes(car._id);
-                  const hasWinner = economyWinners.length > 0;
+                  const isWin  = economyWinners.includes(car._id);
+                  const isLose = economyLosers.includes(car._id);
                   return (
-                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : (hasWinner ? styles.valCellLose : "")}`}>
-                      <div className={`${styles.val} ${isWin ? styles.valWin : (hasWinner ? styles.valLose : "")}`}>
+                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : isLose ? styles.valCellLose : ""}`}>
+                      <div className={`${styles.val} ${isWin ? styles.valWin : isLose ? styles.valLose : ""}`}>
                         {car.economy || "N/A"} {isWin && <span className={styles.winTag}>Better</span>}
                       </div>
                     </td>
@@ -295,16 +318,16 @@ export default function ComparePage() {
 
               {/* HISTORY */}
               <tr>
-                <td className={styles.rowGroupHeader} colSpan={4}><span className={styles.groupLabelText}>History & Condition</span></td>
+                <td className={styles.rowGroupHeader} colSpan={4}><span className={styles.groupLabelText}>History &amp; Condition</span></td>
               </tr>
               <tr>
                 <td className={styles.rowLabelCell}><span className={styles.labelText}>Service History</span></td>
                 {cars.map(car => {
-                  const isWin = historyWinners.includes(car._id);
-                  const hasWinner = historyWinners.length > 0;
+                  const isWin  = historyWinners.includes(car._id);
+                  const isLose = historyLosers.includes(car._id);
                   return (
-                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : (hasWinner ? styles.valCellLose : "")}`}>
-                      <div className={`${styles.val} ${isWin ? styles.valWin : (hasWinner ? styles.valLose : "")}`}>
+                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : isLose ? styles.valCellLose : ""}`}>
+                      <div className={`${styles.val} ${isWin ? styles.valWin : isLose ? styles.valLose : ""}`}>
                         {car.serviceHistory || "N/A"} {isWin && <span className={styles.winTag}>Full</span>}
                       </div>
                     </td>
@@ -314,11 +337,11 @@ export default function ComparePage() {
               <tr>
                 <td className={styles.rowLabelCell}><span className={styles.labelText}>Previous Owners</span></td>
                 {cars.map(car => {
-                  const isWin = ownersWinners.includes(car._id);
-                  const hasWinner = ownersWinners.length > 0;
+                  const isWin  = ownersWinners.includes(car._id);
+                  const isLose = ownersLosers.includes(car._id);
                   return (
-                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : (hasWinner ? styles.valCellLose : "")}`}>
-                      <div className={`${styles.val} ${isWin ? styles.valWin : (hasWinner ? styles.valLose : "")}`}>
+                    <td key={car._id} className={`${styles.valCell} ${isWin ? styles.valCellWin : isLose ? styles.valCellLose : ""}`}>
+                      <div className={`${styles.val} ${isWin ? styles.valWin : isLose ? styles.valLose : ""}`}>
                         {car.owners || "N/A"} {isWin && <span className={styles.winTag}>Fewer</span>}
                       </div>
                     </td>
@@ -333,11 +356,11 @@ export default function ComparePage() {
               <tr>
                 <td className={styles.rowLabelCell}><span className={styles.labelText}>Asking Price</span></td>
                 {cars.map(car => {
-                  const isWin = cheapestCars.includes(car._id);
-                  const hasWinner = cheapestCars.length > 0;
+                  const isWin  = cheapestCars.includes(car._id);
+                  const isLose = priceLosers.includes(car._id);
                   return (
-                    <td key={car._id} className={`${styles.valCell} ${isWin ? "" : (hasWinner ? styles.valCellLose : "")}`}>
-                      <div className={`${styles.val} ${isWin ? styles.carPriceCheaper : (hasWinner ? styles.valLose : "")}`}>
+                    <td key={car._id} className={`${styles.valCell} ${isLose ? styles.valCellLose : ""}`}>
+                      <div className={`${styles.val} ${isWin ? styles.carPriceCheaper : isLose ? styles.valLose : ""}`}>
                         £{car.price?.toLocaleString() || "N/A"} {isWin && <span className={styles.greenTag}>Cheaper</span>}
                       </div>
                     </td>
