@@ -83,10 +83,10 @@ export function useCompare() {
     writeStorage(next);
   }, []);
 
-  // ── Clear all ─────────────────────────────────────────────────────
-  const clearCompare = useCallback(() => {
-    setCompareCars([]);
-    writeStorage([]);
+  // ── Sync: overwrite all ───────────────────────────────────────────
+  const syncCompare = useCallback((slugs: string[]) => {
+    setCompareCars(slugs);
+    writeStorage(slugs);
   }, []);
 
   const isCompared = (slug: string) => compareCars.includes(slug);
@@ -96,6 +96,7 @@ export function useCompare() {
     toggleCompare,
     removeCompare,
     clearCompare,
+    syncCompare,
     isCompared,
     mounted,
   };

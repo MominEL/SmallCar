@@ -9,7 +9,7 @@ import styles from "./page.module.css";
 import { generateCarTitle } from "@/lib/titleSystem";
 
 export default function ComparePage() {
-  const { compareCars, removeCompare, mounted } = useCompare();
+  const { compareCars, removeCompare, syncCompare, mounted } = useCompare();
   const [cars, setCars] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,12 +50,21 @@ export default function ComparePage() {
         }`;
         const data = await client.fetch(query, { slugs: compareCars });
 
-        // Preserve order based on compareCars array
+        // Preserve order based on compareCars array, and filter out ghost cars
+        const validSlugs: string[] = [];
         const ordered = compareCars.map(slug => {
           const car = data.find((c: any) => c.slug.current === slug);
-          if (car) return { ...car, name: generateCarTitle(car) };
+          if (car) {
+            validSlugs.push(slug);
+            return { ...car, name: generateCarTitle(car) };
+          }
           return null;
         }).filter(Boolean);
+
+        // If any cars were deleted from the database, purge them from local storage automatically
+        if (validSlugs.length !== compareCars.length) {
+          syncCompare(validSlugs);
+        }
 
         setCars(ordered);
       } catch (err) {
