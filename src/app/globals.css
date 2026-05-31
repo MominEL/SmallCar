@@ -141,13 +141,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: clamp(52px, 8vw, 96px);
+  font-size: clamp(52px, 6vw, 110px);
   line-height: 0.92;
   letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: clamp(28px, 3vw, 52px);
 }
 
 h3 {
@@ -202,7 +202,7 @@ img {
 
 /* ── Utility: section spacing ──────────────────────────────── */
 .section {
-  padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 52px);
+  padding: clamp(40px, 6vw, 96px) clamp(24px, 5vw, 80px);
   border-bottom: 1px solid var(--border);
   position: relative;
 }
@@ -376,9 +376,9 @@ label {
 /* ── Container ─────────────────────────────────────────────── */
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: 0 clamp(20px, 4vw, 48px);
+  padding: 0 clamp(24px, 5vw, 80px);
 }
 
 /* ── Responsive helpers ────────────────────────────────────── */

@@ -8,9 +8,9 @@
 }
 
 .pageHeader {
-  padding: 32px 5%;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
+  padding: 32px clamp(24px, 5vw, 80px) 24px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: flex-end;
@@ -101,8 +101,8 @@
 
 /* ── COMPARE GRID ── */
 .compareWrap {
-  padding: 0 5% 60px;
-  max-width: 1400px;
+  padding: 0 clamp(24px, 5vw, 80px) 60px;
+  max-width: 1600px;
   margin: 0 auto;
   overflow-x: auto;
 }
