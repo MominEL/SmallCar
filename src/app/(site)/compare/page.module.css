@@ -122,7 +122,7 @@
 }
 
 .colCar {
-  width: calc((100% - 220px) / 3);
+  width: calc((100% - 200px) / var(--car-count, 2));
   padding: 0;
   vertical-align: top;
 }
@@ -231,6 +231,26 @@
   margin-top: auto;
 }
 
+.carPriceBadge {
+  font-family: var(--font-syne), 'Syne', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  color: var(--green);
+  padding: 2px 6px;
+  border-radius: 1px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.noImg {
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+}
+
 .carPriceCheaper {
   color: var(--green);
 }
@@ -329,11 +349,17 @@
 }
 
 .valCellWin {
-  background: rgba(184, 150, 110, 0.05); /* very light gold */
+  background: rgba(184, 150, 110, 0.05);
 }
 
 .valCellLose {
   background: var(--bg);
+}
+
+.valCellEmpty {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  opacity: 0.4;
 }
 
 .val {
@@ -352,6 +378,10 @@
 
 .valLose {
   color: var(--mid);
+}
+
+.valYes {
+  color: var(--green);
 }
 
 .winTag {

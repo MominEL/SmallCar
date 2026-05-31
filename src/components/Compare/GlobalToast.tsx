@@ -12,14 +12,22 @@ export function GlobalToast() {
 
   useEffect(() => {
     if (!mounted) return;
-    
+    let prevCount = compareCars.length;
+
     const handleUpdated = (e: Event) => {
       const customEvent = e as CustomEvent<string[]>;
       const count = customEvent.detail.length;
-      if (count > 0 && count <= 3) {
-        setMessage(`Added to Compare (${count}/3).`);
+      const wasAdded = count > prevCount;
+      prevCount = count;
+
+      if (wasAdded && count <= 3) {
+        setMessage(`Added to compare (${count}/3)`);
         setShow(true);
         setTimeout(() => setShow(false), 5000);
+      } else if (!wasAdded && count > 0) {
+        setMessage(`Removed — ${count} car${count !== 1 ? "s" : ""} in compare`);
+        setShow(true);
+        setTimeout(() => setShow(false), 3000);
       } else if (count === 0) {
         setShow(false);
       }
