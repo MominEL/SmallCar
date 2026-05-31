@@ -44,33 +44,37 @@ export function useCompare() {
   }, []);
 
   const toggleCompare = (slug: string) => {
-    let result = { added: false, limitReached: false };
+    // Read current state synchronously so we can return an accurate result
+    const currentCars = compareCars;
 
-    setCompareCars((prev) => {
-      let newCompare = [...prev];
-      if (prev.includes(slug)) {
-        newCompare = prev.filter((s) => s !== slug);
-        result.added = false;
-      } else {
-        if (prev.length >= 3) {
-          result.limitReached = true;
-          return prev; // Do not add if limit reached
-        }
-        newCompare = [...prev, slug];
-        result.added = true;
-      }
-
+    if (currentCars.includes(slug)) {
+      // Already in list — remove it
+      const newCompare = currentCars.filter((s) => s !== slug);
+      setCompareCars(newCompare);
       try {
         localStorage.setItem("smallcar_compare", JSON.stringify(newCompare));
         window.dispatchEvent(new CustomEvent("compareUpdated", { detail: newCompare }));
       } catch (e) {
         console.error("Error saving compare cars to localStorage", e);
       }
+      return { added: false, limitReached: false };
+    }
 
-      return newCompare;
-    });
+    if (currentCars.length >= 3) {
+      // Limit reached — do nothing
+      return { added: false, limitReached: true };
+    }
 
-    return result;
+    // Add it
+    const newCompare = [...currentCars, slug];
+    setCompareCars(newCompare);
+    try {
+      localStorage.setItem("smallcar_compare", JSON.stringify(newCompare));
+      window.dispatchEvent(new CustomEvent("compareUpdated", { detail: newCompare }));
+    } catch (e) {
+      console.error("Error saving compare cars to localStorage", e);
+    }
+    return { added: true, limitReached: false };
   };
 
   const removeCompare = (slug: string) => {
