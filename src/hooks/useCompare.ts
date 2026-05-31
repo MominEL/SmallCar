@@ -44,8 +44,13 @@ export function useCompare() {
   }, []);
 
   const toggleCompare = (slug: string) => {
-    // Read current state synchronously so we can return an accurate result
-    const currentCars = compareCars;
+    // Always read the LATEST data from localStorage — React state can be stale
+    // because each CompareButton creates its own hook instance.
+    let currentCars: string[] = [];
+    try {
+      const stored = localStorage.getItem("smallcar_compare");
+      if (stored) currentCars = JSON.parse(stored);
+    } catch (e) {}
 
     if (currentCars.includes(slug)) {
       // Already in list — remove it
@@ -54,14 +59,11 @@ export function useCompare() {
       try {
         localStorage.setItem("smallcar_compare", JSON.stringify(newCompare));
         window.dispatchEvent(new CustomEvent("compareUpdated", { detail: newCompare }));
-      } catch (e) {
-        console.error("Error saving compare cars to localStorage", e);
-      }
+      } catch (e) {}
       return { added: false, limitReached: false };
     }
 
     if (currentCars.length >= 3) {
-      // Limit reached — do nothing
       return { added: false, limitReached: true };
     }
 
@@ -71,9 +73,7 @@ export function useCompare() {
     try {
       localStorage.setItem("smallcar_compare", JSON.stringify(newCompare));
       window.dispatchEvent(new CustomEvent("compareUpdated", { detail: newCompare }));
-    } catch (e) {
-      console.error("Error saving compare cars to localStorage", e);
-    }
+    } catch (e) {}
     return { added: true, limitReached: false };
   };
 
