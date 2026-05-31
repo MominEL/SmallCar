@@ -83,6 +83,12 @@ export function useCompare() {
     writeStorage(next);
   }, []);
 
+  // ── Clear all ─────────────────────────────────────────────────────
+  const clearCompare = useCallback(() => {
+    setCompareCars([]);
+    writeStorage([]);
+  }, []);
+
   // ── Sync: overwrite all ───────────────────────────────────────────
   const syncCompare = useCallback((slugs: string[]) => {
     setCompareCars(slugs);
