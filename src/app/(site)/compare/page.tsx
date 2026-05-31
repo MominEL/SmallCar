@@ -79,16 +79,16 @@ export default function ComparePage() {
   }
 
   // Calculate Winners
-  const getWinners = (field: string, type: "high" | "low" = "high") => {
+  const getWinners = (field: string, type: "high" | "low" = "high", isNumeric: boolean = true) => {
     if (cars.length < 2) return [];
     
     let validCars = cars.filter(c => c[field] !== undefined && c[field] !== null && c[field] !== "");
     if (validCars.length < 2) return [];
 
-    let bestValue = validCars[0][field];
+    let bestValue = isNumeric ? parseFloat(validCars[0][field]) : validCars[0][field];
 
     for (let i = 1; i < validCars.length; i++) {
-      const val = validCars[i][field];
+      const val = isNumeric ? parseFloat(validCars[i][field]) : validCars[i][field];
       if (type === "high" && val > bestValue) {
         bestValue = val;
       } else if (type === "low" && val < bestValue) {
@@ -96,36 +96,47 @@ export default function ComparePage() {
       }
     }
     
-    const winners = validCars.filter(c => c[field] === bestValue).map(c => c._id);
+    const winners = validCars.filter(c => {
+      const val = isNumeric ? parseFloat(c[field]) : c[field];
+      return val === bestValue;
+    }).map(c => c._id);
+    
     if (winners.length === validCars.length) return [];
     return winners;
   };
 
   const getCheapestCars = () => {
     if (cars.length < 2) return [];
-    let min = cars[0].price;
-    for (let i = 1; i < cars.length; i++) {
-      if (cars[i].price < min) {
-        min = cars[i].price;
+    let validCars = cars.filter(c => c.price !== undefined && c.price !== null && c.price !== "");
+    if (validCars.length < 2) return [];
+    
+    let min = parseFloat(validCars[0].price);
+    for (let i = 1; i < validCars.length; i++) {
+      const price = parseFloat(validCars[i].price);
+      if (price < min) {
+        min = price;
       }
     }
-    const winners = cars.filter(c => c.price === min).map(c => c._id);
-    if (winners.length === cars.length) return [];
+    const winners = validCars.filter(c => parseFloat(c.price) === min).map(c => c._id);
+    if (winners.length === validCars.length) return [];
     return winners;
   };
 
-  const bhpWinners = getWinners("bhp", "high");
-  const speedWinners = getWinners("topSpeed", "high");
-  const accelWinners = getWinners("zeroToSixty", "low");
-  const mileageWinners = getWinners("mileage", "low");
-  const economyWinners = getWinners("economy", "high");
-  const ownersWinners = getWinners("owners", "low");
+  const bhpWinners = getWinners("bhp", "high", true);
+  const speedWinners = getWinners("topSpeed", "high", true);
+  const accelWinners = getWinners("zeroToSixty", "low", true);
+  const mileageWinners = getWinners("mileage", "low", true);
+  const economyWinners = getWinners("economy", "high", true);
+  const ownersWinners = getWinners("owners", "low", true);
   const cheapestCars = getCheapestCars();
 
   const getHistoryWinners = () => {
     if (cars.length < 2) return [];
-    const fullCars = cars.filter(c => c.serviceHistory?.toLowerCase().includes("full") || c.serviceHistory?.toLowerCase().includes("fill"));
-    if (fullCars.length === cars.length || fullCars.length === 0) return [];
+    const validCars = cars.filter(c => c.serviceHistory !== undefined && c.serviceHistory !== null && c.serviceHistory !== "");
+    if (validCars.length < 2) return [];
+    
+    const fullCars = validCars.filter(c => c.serviceHistory.toLowerCase().includes("full") || c.serviceHistory.toLowerCase().includes("fill"));
+    if (fullCars.length === validCars.length || fullCars.length === 0) return [];
     return fullCars.map(c => c._id);
   };
   const historyWinners = getHistoryWinners();
